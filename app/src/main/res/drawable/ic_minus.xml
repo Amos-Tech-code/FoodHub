@@ -1,0 +1,21 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="84dp"
+    android:height="91dp"
+    android:viewportWidth="84"
+    android:viewportHeight="91">
+
+  <!-- Centered Circle -->
+  <path
+      android:strokeWidth="1"
+      android:pathData="M42,22A14.799,14.799 0,1 1,27.201 36.799A14.799,14.799 0,0 1,42 22z"
+      android:fillColor="#00000000"
+      android:strokeColor="#FE724C"/>
+
+  <!-- Centered Horizontal Line -->
+  <path
+      android:pathData="M37.35,36.5H46.65"
+      android:strokeWidth="1.5"
+      android:fillColor="#00000000"
+      android:strokeColor="#FE724C"
+      android:strokeLineCap="round"/>
+</vector>
