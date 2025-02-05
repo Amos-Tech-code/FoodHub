@@ -4,14 +4,19 @@ import com.amos_tech_code.foodhub.data.model.request.AddToCartRequest
 import com.amos_tech_code.foodhub.data.model.request.OauthRequest
 import com.amos_tech_code.foodhub.data.model.request.SignInRequest
 import com.amos_tech_code.foodhub.data.model.request.SignUpRequest
+import com.amos_tech_code.foodhub.data.model.request.UpdateCartItemRequest
 import com.amos_tech_code.foodhub.data.model.response.AddToCartResponse
 import com.amos_tech_code.foodhub.data.model.response.AuthResponse
+import com.amos_tech_code.foodhub.data.model.response.CartResponse
 import com.amos_tech_code.foodhub.data.model.response.CategoriesResponse
+import com.amos_tech_code.foodhub.data.model.response.GenericMsgResponse
 import com.amos_tech_code.foodhub.data.model.response.FoodItemResponse
 import com.amos_tech_code.foodhub.data.model.response.RestaurantsResponse
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -41,4 +46,13 @@ interface FoodApi {
 
     @POST("/cart")
     suspend fun addToCart(@Body request: AddToCartRequest) : Response<AddToCartResponse>
+
+    @GET("/cart")
+    suspend fun getCartItems() : Response<CartResponse>
+
+    @DELETE("/cart/{cartItemId}")
+    suspend fun deleteCartItem(@Path("cartItemId") cartItemId: String) : Response<GenericMsgResponse>
+
+    @PATCH("/cart")
+    suspend fun updateCart(@Body request: UpdateCartItemRequest) : Response<GenericMsgResponse>
 }

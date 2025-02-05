@@ -1,13 +1,12 @@
 package com.amos_tech_code.foodhub.ui.presentation.feature.food_details
 
-import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,7 +17,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,33 +32,38 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.amos_tech_code.foodhub.R
 import com.amos_tech_code.foodhub.data.model.response.FoodItem
+import com.amos_tech_code.foodhub.ui.presentation.BasicDialog
 import com.amos_tech_code.foodhub.ui.presentation.feature.restaurants_details.RestaurantsDetails
 import com.amos_tech_code.foodhub.ui.presentation.feature.restaurants_details.RestaurantsDetailsHeader
+import com.amos_tech_code.foodhub.ui.presentation.navigation.Cart
 import kotlinx.coroutines.flow.collectLatest
 
-@OptIn(ExperimentalSharedTransitionApi::class)
+@OptIn(ExperimentalSharedTransitionApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun SharedTransitionScope.FoodDetailsScreen(
     navController: NavController,
     foodItem: FoodItem,
     animatedVisibilityScope: AnimatedVisibilityScope,
-    viewModel: FoodDetailsViewModel
+    viewModel: FoodDetailsViewModel = hiltViewModel()
 ) {
 
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     val count = viewModel.quantity.collectAsStateWithLifecycle()
     val isLoading = remember { mutableStateOf(false) }
+    val showErrorDialog = remember { mutableStateOf(false) }
+    val showSuccessDialog = remember { mutableStateOf(false) }
 
     when (uiState.value) {
         is FoodDetailsViewModel.FoodDetailsUiState.Loading -> {
-            isLoading.value = false
+            isLoading.value = true
         }
         else -> {
-            isLoading.value = true
+            isLoading.value = false
         }
     }
 
@@ -64,25 +71,16 @@ fun SharedTransitionScope.FoodDetailsScreen(
         viewModel.navigationEvent.collectLatest {
             when (it) {
                 is FoodDetailsViewModel.FoodDetailsNavigationEvent.GoToCart -> {
-
+                    navController.navigate(Cart)
                 }
                 is FoodDetailsViewModel.FoodDetailsNavigationEvent.ShowErrorDialog -> {
-                    Toast.makeText(
-                        navController.context,
-                        it.message,
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    showErrorDialog.value = true
                 }
                 is FoodDetailsViewModel.FoodDetailsNavigationEvent.OnAddToCart -> {
-                    Toast.makeText(
-                        navController.context,
-                        "Item added to Cart Successfully",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    showSuccessDialog.value = true
                 }
 
                 null -> {
-                    TODO()
                 }
             }
         }
@@ -152,31 +150,95 @@ fun SharedTransitionScope.FoodDetailsScreen(
                     foodItemId = foodItem.id
                 )
             },
+            enabled = !isLoading.value,
             modifier = Modifier.padding(16.dp)
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.background(MaterialTheme.colorScheme.primary)
-            ) {
-                Box(
+                AnimatedVisibility(visible = !isLoading.value) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.background(MaterialTheme.colorScheme.primary)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(30.dp)
+                                .clip(CircleShape)
+                                .background(Color.White),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_cart),
+                                contentDescription = null
+                            )
+                        }
+                        Spacer(modifier = Modifier.size(8.dp))
+
+                        Text(
+                            text = "Add to cart".uppercase(),
+                            style = MaterialTheme.typography.bodyMedium,
+                            modifier = Modifier.padding(horizontal = 16.dp)
+                        )
+                    }
+                }
+                AnimatedVisibility(visible = isLoading.value) {
+                    CircularProgressIndicator(modifier = Modifier.size(24.dp))
+                }
+
+        }
+    }
+
+    if (showSuccessDialog.value) {
+        ModalBottomSheet(
+            onDismissRequest = {
+                //showSuccessDialog.value = false
+            }
+        ) {
+            Column() {
+                Text(
+                    text = "Item added to cart successfully",
+                    style = MaterialTheme.typography.headlineSmall
+                )
+                Spacer(modifier = Modifier.size(16.dp))
+
+                Button(
+                    onClick = {
+                        showSuccessDialog.value = false
+                        viewModel.goToCart()
+                    },
                     modifier = Modifier
-                        .size(30.dp)
-                        .clip(CircleShape)
-                        .background(Color.White),
-                    contentAlignment = Alignment.Center
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth()
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_cart),
-                        contentDescription = null
+                    Text(
+                        text = "Go to Cart"
                     )
                 }
-                Spacer(modifier = Modifier.size(8.dp))
-                Text(
-                    text = "Add to cart".uppercase(),
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                )
+                Button(
+                    onClick = {
+                        showSuccessDialog.value = false
+                    },
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth()
+                ) {
+                    Text(
+                        text = "OK"
+                    )
+                }
             }
         }
     }
+    if (showErrorDialog.value) {
+        ModalBottomSheet(onDismissRequest = { showErrorDialog.value = false }) {
+            BasicDialog(
+                title = "Error",
+                description = (uiState.value as? FoodDetailsViewModel.FoodDetailsUiState.Error)?.message
+                ?: "Failed to add item to cart"
+            ) {
+                showErrorDialog.value = false
+            }
+        }
+    }
+
+
+
 }

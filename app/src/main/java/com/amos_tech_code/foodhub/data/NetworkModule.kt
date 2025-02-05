@@ -17,13 +17,19 @@ import java.util.concurrent.TimeUnit
 object NetworkModule {
 
     @Provides
-    fun provideOkHttpClient(): OkHttpClient {
+    fun provideOkHttpClient(foodHubSession: FoodHubSession): OkHttpClient {
         val logging = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
 
         return OkHttpClient.Builder()
             .addInterceptor(logging)
+            .addInterceptor { chain ->
+                val request = chain.request().newBuilder()
+                    .addHeader("Authorization", "Bearer ${foodHubSession.getToken()}")
+                    .build()
+                chain.proceed(request)
+            }
             .connectTimeout(30, TimeUnit.SECONDS)  // Connection timeout
             .readTimeout(30, TimeUnit.SECONDS)    // Read timeout
             .writeTimeout(30, TimeUnit.SECONDS)   // Write timeout
@@ -31,11 +37,11 @@ object NetworkModule {
     }
 
     @Provides
-    fun provideRetrofit() : Retrofit {
+    fun provideRetrofit(client: OkHttpClient) : Retrofit {
 
         return Retrofit.Builder()
             .baseUrl("http://192.168.100.8:8080")
-            .client(provideOkHttpClient())
+            .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

@@ -7,6 +7,7 @@ import com.amos_tech_code.foodhub.data.model.request.AddToCartRequest
 import com.amos_tech_code.foodhub.data.model.response.FoodItem
 import com.amos_tech_code.foodhub.data.remote.ApiResponse
 import com.amos_tech_code.foodhub.data.remote.safeApiCall
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -14,9 +15,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class FoodDetailsViewModel @Inject constructor(
-    private val foodApi: FoodApi
-
+    private val foodApi: FoodApi,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<FoodDetailsUiState>(FoodDetailsUiState.Nothing)
@@ -25,17 +26,21 @@ class FoodDetailsViewModel @Inject constructor(
     private val _navigationEvent = MutableSharedFlow<FoodDetailsNavigationEvent?>()
     val navigationEvent = _navigationEvent.asSharedFlow()
 
-    private val _quantity = MutableStateFlow<Int>(0)
+    private val _quantity = MutableStateFlow<Int>(1)
     val quantity = _quantity.asStateFlow()
 
     fun incrementQuantity() {
+        if (_quantity.value == 10) {
+            return
+        }
         _quantity.value++
     }
 
     fun decrementQuantity() {
-        if (_quantity.value > 0) {
-            _quantity.value--
+        if (_quantity.value == 1) {
+            return
         }
+        _quantity.value--
     }
 
     fun addToCart(
@@ -70,6 +75,12 @@ class FoodDetailsViewModel @Inject constructor(
             }
         }
 
+    }
+
+    fun goToCart() {
+        viewModelScope.launch {
+            _navigationEvent.emit(FoodDetailsNavigationEvent.GoToCart)
+        }
     }
 
     sealed class FoodDetailsUiState {

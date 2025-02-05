@@ -12,11 +12,8 @@ class FoodHubSession(private val context: Context) {
         sharedPreferences.edit().putString("token", token).apply()
     }
 
-    fun getToken() : String? {
-        sharedPreferences.getString("token", null)?.let {
-            return it
-        }
-        return null
+    fun getToken(): String? {
+        return sharedPreferences.getString("token", null)  // Directly return the value
     }
 
     fun clearSession() {

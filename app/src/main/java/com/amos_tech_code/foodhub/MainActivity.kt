@@ -32,10 +32,12 @@ import com.amos_tech_code.foodhub.data.model.response.FoodItem
 import com.amos_tech_code.foodhub.ui.presentation.feature.auth.AuthScreen
 import com.amos_tech_code.foodhub.ui.presentation.feature.auth.login.LoginScreen
 import com.amos_tech_code.foodhub.ui.presentation.feature.auth.signup.SignUpScreen
+import com.amos_tech_code.foodhub.ui.presentation.feature.cart.CartScreen
 import com.amos_tech_code.foodhub.ui.presentation.feature.food_details.FoodDetailsScreen
 import com.amos_tech_code.foodhub.ui.presentation.feature.home.HomeScreen
 import com.amos_tech_code.foodhub.ui.presentation.feature.restaurants_details.RestaurantDetailsScreen
 import com.amos_tech_code.foodhub.ui.presentation.navigation.AuthScreen
+import com.amos_tech_code.foodhub.ui.presentation.navigation.Cart
 import com.amos_tech_code.foodhub.ui.presentation.navigation.FoodDetails
 import com.amos_tech_code.foodhub.ui.presentation.navigation.Home
 import com.amos_tech_code.foodhub.ui.presentation.navigation.Login
@@ -170,6 +172,10 @@ class MainActivity : ComponentActivity() {
                                     foodItem = route.foodItem,
                                     this
                                 )
+                            }
+
+                            composable<Cart> {
+                                CartScreen(navController)
                             }
 
                         }

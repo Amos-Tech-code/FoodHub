@@ -3,6 +3,7 @@ package com.amos_tech_code.foodhub.ui.presentation.feature.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amos_tech_code.foodhub.data.FoodApi
+import com.amos_tech_code.foodhub.data.FoodHubSession
 import com.amos_tech_code.foodhub.data.model.response.Category
 import com.amos_tech_code.foodhub.data.model.response.Restaurant
 import com.amos_tech_code.foodhub.data.remote.ApiResponse
@@ -16,7 +17,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val foodApi: FoodApi): ViewModel() {
+class HomeViewModel @Inject constructor(
+    private val foodApi: FoodApi,
+    private val foodHubSession: FoodHubSession
+): ViewModel() {
 
     private val _uiState = MutableStateFlow<HomeScreenState>(HomeScreenState.Loading)
     val uiState = _uiState.asStateFlow()
@@ -69,8 +73,8 @@ class HomeViewModel @Inject constructor(private val foodApi: FoodApi): ViewModel
                 list = response.data.data
 
             }
-
             else -> {
+
             }
         }
         return list
@@ -87,10 +91,17 @@ class HomeViewModel @Inject constructor(private val foodApi: FoodApi): ViewModel
 
     }
 
+    fun logOut() {
+        viewModelScope.launch {
+            foodHubSession.clearSession()
+            _navigationEvent.emit(HomeScreenNavigationEvents.NavigateToLogin)
+        }
+    }
+
     sealed class HomeScreenState {
         data object Loading: HomeScreenState()
 
-        data object Empty: HomeScreenState()
+        data object Empty : HomeScreenState()
 
         data object Success: HomeScreenState()
     }
@@ -101,6 +112,8 @@ class HomeViewModel @Inject constructor(private val foodApi: FoodApi): ViewModel
             val imageUrl: String,
             val id: String
         ): HomeScreenNavigationEvents()
+
+        data object NavigateToLogin : HomeScreenNavigationEvents()
     }
 
 }

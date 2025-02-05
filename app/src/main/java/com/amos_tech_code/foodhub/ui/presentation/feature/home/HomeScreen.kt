@@ -46,11 +46,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.amos_tech_code.foodhub.R
 import com.amos_tech_code.foodhub.data.model.response.Category
 import com.amos_tech_code.foodhub.data.model.response.Restaurant
 import com.amos_tech_code.foodhub.ui.presentation.TripleOrbitAnimation
+import com.amos_tech_code.foodhub.ui.presentation.navigation.AuthScreen
+import com.amos_tech_code.foodhub.ui.presentation.navigation.Home
+import com.amos_tech_code.foodhub.ui.presentation.navigation.Login
 import com.amos_tech_code.foodhub.ui.presentation.navigation.RestaurantsDetails
 import com.amos_tech_code.foodhub.ui.theme.Orange
 import kotlinx.coroutines.flow.collectLatest
@@ -62,14 +66,20 @@ fun SharedTransitionScope.HomeScreen(
     animatedVisibilityScope: AnimatedVisibilityScope,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
+
     LaunchedEffect(Unit) {
         viewModel.navigationEvents.collectLatest {
             when (it) {
                 is HomeViewModel.HomeScreenNavigationEvents.NavigateToDetail -> {
                     navController.navigate(RestaurantsDetails(it.name, it.imageUrl, it.id,))
                 }
-
-                null -> {}
+                is HomeViewModel.HomeScreenNavigationEvents.NavigateToLogin -> {
+                    navController.navigate(AuthScreen) {
+                        popUpTo(Home) { inclusive = true }
+                    }
+                }
+                else -> {
+                }
             }
         }
     }
@@ -94,7 +104,13 @@ fun SharedTransitionScope.HomeScreen(
             }
 
             is HomeViewModel.HomeScreenState.Empty -> {
-                Text(text = "Empty")
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = CenterHorizontally
+                ) {
+                    Text(text = "Empty Api Response")
+                }
             }
 
             is HomeViewModel.HomeScreenState.Success -> {
@@ -108,6 +124,10 @@ fun SharedTransitionScope.HomeScreen(
                         viewModel.onRestaurantSelected(it)
                     }
                 )
+
+                LogOut {
+                    viewModel.logOut()
+                }
             }
         }
     }
@@ -334,5 +354,17 @@ fun CategoryItem(
         Text(
             text = category.name, style = TextStyle(fontSize = 10.sp), textAlign = TextAlign.Center
         )
+    }
+}
+
+@Composable
+fun LogOut(onLogOutClick: () -> Unit) {
+    Spacer(modifier = Modifier.size(8.dp))
+    TextButton(
+        onClick = {
+            onLogOutClick()
+        }
+    ) {
+        Text(text = "Log Out")
     }
 }
