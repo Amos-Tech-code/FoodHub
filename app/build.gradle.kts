@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -22,6 +24,14 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    val localProperties = Properties()
+    val localPropertiesFile = File(rootDir,"secret.properties")
+    if (localPropertiesFile.exists() && localPropertiesFile.isFile) {
+        localPropertiesFile.inputStream().use {
+            localProperties.load(it)
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -29,6 +39,18 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("String", "MAPS_API_KEY", localProperties.getProperty("MAPS_API_KEY"))
+            buildConfigField("String", "FACEBOOK_CLIENT_TOKEN", localProperties.getProperty("FACEBOOK_CLIENT_TOKEN"))
+            buildConfigField("String", "FACEBOOK_APP_ID", localProperties.getProperty("FACEBOOK_APP_ID"))
+            buildConfigField("String", "GOOGLE_CLIENT_ID", localProperties.getProperty("GOOGLE_CLIENT_ID"))
+
+        }
+
+        debug {
+            buildConfigField("String", "MAPS_API_KEY", localProperties.getProperty("MAPS_API_KEY"))
+            buildConfigField("String", "FACEBOOK_CLIENT_TOKEN", localProperties.getProperty("FACEBOOK_CLIENT_TOKEN"))
+            buildConfigField("String", "FACEBOOK_APP_ID", localProperties.getProperty("FACEBOOK_APP_ID"))
+            buildConfigField("String", "GOOGLE_CLIENT_ID", localProperties.getProperty("GOOGLE_CLIENT_ID"))
         }
     }
     compileOptions {
@@ -40,6 +62,8 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
+        resValues = true
     }
 }
 
@@ -93,6 +117,8 @@ dependencies {
     implementation("androidx.compose.foundation:foundation:1.7.7")
     // Compose Animation
     implementation("androidx.compose.animation:animation:1.7.7")
+    // Android Maps Compose composables for the Maps SDK for Android
+    implementation("com.google.maps.android:maps-compose:6.4.1")
 
 
 }

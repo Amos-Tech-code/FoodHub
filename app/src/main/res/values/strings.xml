@@ -17,8 +17,6 @@
     <string name="sign_in">Login</string>
     <string name="dont_have_account">Don\'t have an account? Sign Up</string>
 
-    <string name="facebook_app_id">1359019251751065</string>
     <string name="fb_login_protocol_scheme">fb1234</string>
-    <string name="facebook_client_token">6c6be3de6b553068148ab60fe459aea6</string>
 
 </resources>

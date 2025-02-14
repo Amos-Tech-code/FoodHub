@@ -48,6 +48,7 @@ import kotlinx.coroutines.flow.collectLatest
 fun SharedTransitionScope.FoodDetailsScreen(
     navController: NavController,
     foodItem: FoodItem,
+    onAddToCartClicked: () -> Unit,
     animatedVisibilityScope: AnimatedVisibilityScope,
     viewModel: FoodDetailsViewModel = hiltViewModel()
 ) {
@@ -78,6 +79,7 @@ fun SharedTransitionScope.FoodDetailsScreen(
                 }
                 is FoodDetailsViewModel.FoodDetailsNavigationEvent.OnAddToCart -> {
                     showSuccessDialog.value = true
+                    onAddToCartClicked()
                 }
 
                 null -> {

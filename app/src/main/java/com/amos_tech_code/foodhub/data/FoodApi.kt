@@ -6,6 +6,7 @@ import com.amos_tech_code.foodhub.data.model.request.SignInRequest
 import com.amos_tech_code.foodhub.data.model.request.SignUpRequest
 import com.amos_tech_code.foodhub.data.model.request.UpdateCartItemRequest
 import com.amos_tech_code.foodhub.data.model.response.AddToCartResponse
+import com.amos_tech_code.foodhub.data.model.response.AddressResponse
 import com.amos_tech_code.foodhub.data.model.response.AuthResponse
 import com.amos_tech_code.foodhub.data.model.response.CartResponse
 import com.amos_tech_code.foodhub.data.model.response.CategoriesResponse
@@ -55,4 +56,7 @@ interface FoodApi {
 
     @PATCH("/cart")
     suspend fun updateCart(@Body request: UpdateCartItemRequest) : Response<GenericMsgResponse>
+
+    @GET("/addresses")
+    suspend fun getAddress() : Response<AddressResponse>
 }
