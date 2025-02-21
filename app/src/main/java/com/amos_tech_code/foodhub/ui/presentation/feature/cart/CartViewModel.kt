@@ -3,6 +3,7 @@ package com.amos_tech_code.foodhub.ui.presentation.feature.cart
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amos_tech_code.foodhub.data.FoodApi
+import com.amos_tech_code.foodhub.data.model.Address
 import com.amos_tech_code.foodhub.data.model.request.UpdateCartItemRequest
 import com.amos_tech_code.foodhub.data.model.response.CartItem
 import com.amos_tech_code.foodhub.data.model.response.CartResponse
@@ -34,6 +35,9 @@ class CartViewModel @Inject constructor(
 
     private var _cartItemsCount = MutableStateFlow(0)
     val itemCount = _cartItemsCount.asStateFlow()
+
+    private val _address = MutableStateFlow<Address?>(null)
+    val selectedAddress = _address.asStateFlow()
 
     init {
         getCart()
@@ -140,6 +144,10 @@ class CartViewModel @Inject constructor(
 
     fun checkOut() {
 
+    }
+
+    fun setSelectedAddress(it: Address) {
+        _address.value = it
     }
 
     sealed class CartUiState {

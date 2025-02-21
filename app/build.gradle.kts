@@ -8,6 +8,7 @@ plugins {
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
     id("org.jetbrains.kotlin.plugin.serialization")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -117,8 +118,14 @@ dependencies {
     implementation("androidx.compose.foundation:foundation:1.7.7")
     // Compose Animation
     implementation("androidx.compose.animation:animation:1.7.7")
-    // Android Maps Compose composables for the Maps SDK for Android
+    // Android Maps Compose composable for the Maps SDK for Android
     implementation("com.google.maps.android:maps-compose:6.4.1")
+    //Google play services for location
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+    //Kotlinx coroutines for Google play services for location
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
+
+
 
 
 }

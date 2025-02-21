@@ -17,8 +17,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -61,7 +61,14 @@ fun CartScreen(
 
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     val showErrorDialog = remember { mutableStateOf(false) }
+    val address = navController.currentBackStackEntry?.savedStateHandle?.getStateFlow<Address?>(
+        "selectedAddress", null)?.collectAsStateWithLifecycle()
 
+    LaunchedEffect(key1 = address?.value) {
+        address?.value?.let {
+            viewModel.setSelectedAddress(it)
+        }
+    }
     LaunchedEffect(key1 = true) {
         viewModel.event.collectLatest {
             when (it) {
@@ -123,7 +130,7 @@ fun CartScreen(
                val data = (uiState.value as CartViewModel.CartUiState.Success).data
 
                 if (data.items.isNotEmpty()) {
-                    LazyColumn() {
+                    LazyColumn {
                         items(data.items) {
                             CartItemView(
                                 cartItem = it,
@@ -162,11 +169,16 @@ fun CartScreen(
                 }
             }
         }
+        val selectedAddress = viewModel.selectedAddress.collectAsStateWithLifecycle()
         Spacer(modifier = Modifier.weight(1f))
         if (uiState.value is CartViewModel.CartUiState.Success) {
-            AddressCard(null , onAddressClicked = { viewModel.onAddressClicked() })
+            AddressCard(
+                selectedAddress.value,
+                onAddressClicked = { viewModel.onAddressClicked() }
+            )
             Button(
                 onClick = { viewModel.checkOut() },
+                enabled = selectedAddress.value != null,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
@@ -205,7 +217,7 @@ fun CartScreenHeader(
             modifier = Modifier.size(30.dp)
         ) {
             Icon(
-                imageVector = Icons.Filled.KeyboardArrowLeft,
+                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                 contentDescription = null
             )
         }

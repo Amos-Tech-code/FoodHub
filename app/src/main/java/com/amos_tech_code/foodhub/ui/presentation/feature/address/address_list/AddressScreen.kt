@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -49,7 +50,22 @@ fun AddressScreen(
                 is AddressViewModel.AddressEvent.ShowErrorDialog -> {
 
                 }
+
+                is AddressViewModel.AddressEvent.NavigateBack -> {
+                    val address = it.address
+                    navController.previousBackStackEntry?.savedStateHandle?.set("selectedAddress", address)
+                    navController.popBackStack()
+                }
             }
+        }
+    }
+
+    val isAddressAdded =
+        navController.currentBackStackEntry?.savedStateHandle?.getStateFlow("isAddressAdded", false)?.collectAsState()
+
+    LaunchedEffect(key1 = isAddressAdded?.value) {
+        if (isAddressAdded?.value == true) {
+            viewModel.getAddress()
         }
     }
 
@@ -108,7 +124,15 @@ fun AddressScreen(
                     modifier = Modifier.padding(16.dp).fillMaxSize()
                 ) {
                     items(state.data) { address ->
-                        AddressCard(address = address, onAddressClicked = {})
+                        AddressCard(
+                            address = address,
+                            onAddressClicked = {
+                                viewModel.onAddressSelected(address
+                                )
+//                                navController.previousBackStackEntry?.savedStateHandle?.set("selectedAddress", address)
+//                                navController.popBackStack()
+                            }
+                        )
                     }
                 }
             }

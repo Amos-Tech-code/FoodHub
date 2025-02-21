@@ -1,7 +1,9 @@
 package com.amos_tech_code.foodhub.data
 
+import com.amos_tech_code.foodhub.data.model.Address
 import com.amos_tech_code.foodhub.data.model.request.AddToCartRequest
 import com.amos_tech_code.foodhub.data.model.request.OauthRequest
+import com.amos_tech_code.foodhub.data.model.request.ReverseGeocodeRequest
 import com.amos_tech_code.foodhub.data.model.request.SignInRequest
 import com.amos_tech_code.foodhub.data.model.request.SignUpRequest
 import com.amos_tech_code.foodhub.data.model.request.UpdateCartItemRequest
@@ -59,4 +61,11 @@ interface FoodApi {
 
     @GET("/addresses")
     suspend fun getAddress() : Response<AddressResponse>
+
+    @POST("/addresses/reverse-geocode")
+    suspend fun reverseGeocode(@Body request: ReverseGeocodeRequest) : Response<Address>
+
+    @POST("/addresses")
+    suspend fun storeAddress(@Body request: Address) : Response<GenericMsgResponse>
+
 }

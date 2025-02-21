@@ -62,6 +62,12 @@ class AddressViewModel @Inject constructor(
         }
     }
 
+    fun onAddressSelected(address: Address) {
+        viewModelScope.launch {
+            _event.emit(AddressEvent.NavigateBack(address))
+        }
+    }
+
     sealed class AddressUiState {
         data object Loading : AddressUiState()
 
@@ -77,5 +83,7 @@ class AddressViewModel @Inject constructor(
         data object ShowErrorDialog : AddressEvent()
 
         data object NavigateToAddAddress : AddressEvent()
+
+        data class NavigateBack(val address: Address) : AddressEvent()
     }
 }
