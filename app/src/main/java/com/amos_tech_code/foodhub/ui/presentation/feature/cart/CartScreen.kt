@@ -49,7 +49,12 @@ import com.amos_tech_code.foodhub.data.model.response.CartItem
 import com.amos_tech_code.foodhub.data.model.response.CheckoutDetails
 import com.amos_tech_code.foodhub.ui.presentation.BasicDialog
 import com.amos_tech_code.foodhub.ui.presentation.navigation.AddressList
+import com.amos_tech_code.foodhub.ui.presentation.navigation.OrderSuccess
 import com.amos_tech_code.foodhub.utils.StringUtils
+import com.stripe.android.PaymentConfiguration
+import com.stripe.android.paymentsheet.PaymentSheet
+import com.stripe.android.paymentsheet.PaymentSheetResult
+import com.stripe.android.paymentsheet.rememberPaymentSheet
 import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -63,6 +68,14 @@ fun CartScreen(
     val showErrorDialog = remember { mutableStateOf(false) }
     val address = navController.currentBackStackEntry?.savedStateHandle?.getStateFlow<Address?>(
         "selectedAddress", null)?.collectAsStateWithLifecycle()
+
+    val paymentSheet = rememberPaymentSheet(paymentResultCallback = {
+        if (it is PaymentSheetResult.Completed) {
+            viewModel.onPaymentSuccess()
+        } else {
+            viewModel.onPaymentFailure()
+        }
+    })
 
     LaunchedEffect(key1 = address?.value) {
         address?.value?.let {
@@ -85,9 +98,33 @@ fun CartScreen(
                 CartViewModel.CartEvent.OnAddressClicked -> {
                     navController.navigate(AddressList)
                 }
+
+                is CartViewModel.CartEvent.OnInitiatePayment -> {
+                    PaymentConfiguration.init(navController.context, it.data.publishableKey)
+
+                    val customer = PaymentSheet.CustomerConfiguration(
+                        it.data.customerId,
+                        it.data.ephemeralKeySecret
+                    )
+                    val paymentSheetConfiguration = PaymentSheet.Configuration(
+                        merchantDisplayName = "Food Hub",
+                        customer = customer,
+                        allowsDelayedPaymentMethods = false
+                    )
+                    //Initiate Payment
+                    paymentSheet.presentWithPaymentIntent(
+                        it.data.paymentIntentClientSecret,
+                        paymentSheetConfiguration
+                    )
+                }
+
+                is CartViewModel.CartEvent.OrderSuccess -> {
+                    navController.navigate(OrderSuccess(it.orderId!!))
+                }
             }
         }
     }
+
     Column(
         modifier = Modifier
             .fillMaxSize()

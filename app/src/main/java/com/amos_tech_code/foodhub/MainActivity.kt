@@ -59,6 +59,7 @@ import com.amos_tech_code.foodhub.ui.presentation.feature.cart.CartScreen
 import com.amos_tech_code.foodhub.ui.presentation.feature.cart.CartViewModel
 import com.amos_tech_code.foodhub.ui.presentation.feature.food_details.FoodDetailsScreen
 import com.amos_tech_code.foodhub.ui.presentation.feature.home.HomeScreen
+import com.amos_tech_code.foodhub.ui.presentation.feature.order_success.OrderSuccessScreen
 import com.amos_tech_code.foodhub.ui.presentation.feature.restaurants_details.RestaurantDetailsScreen
 import com.amos_tech_code.foodhub.ui.presentation.navigation.AddAddress
 import com.amos_tech_code.foodhub.ui.presentation.navigation.AddressList
@@ -69,6 +70,7 @@ import com.amos_tech_code.foodhub.ui.presentation.navigation.Home
 import com.amos_tech_code.foodhub.ui.presentation.navigation.Login
 import com.amos_tech_code.foodhub.ui.presentation.navigation.NavItems
 import com.amos_tech_code.foodhub.ui.presentation.navigation.Notification
+import com.amos_tech_code.foodhub.ui.presentation.navigation.OrderSuccess
 import com.amos_tech_code.foodhub.ui.presentation.navigation.Orders
 import com.amos_tech_code.foodhub.ui.presentation.navigation.RestaurantsDetails
 import com.amos_tech_code.foodhub.ui.presentation.navigation.SignUp
@@ -179,7 +181,8 @@ class MainActivity : ComponentActivity() {
                                                     ) {
                                                         Text(
                                                             text = "${cartItemCount.value}",
-                                                            color = Color.White,                                                style = TextStyle(fontSize = 10.sp),
+                                                            color = Color.White,
+                                                            style = TextStyle(fontSize = 10.sp),
                                                             modifier = Modifier
                                                                 .align(Alignment.Center)
                                                         )
@@ -301,6 +304,15 @@ class MainActivity : ComponentActivity() {
                                 shouldShowBottomNav.value = false
                                 AddAddressScreen(
                                     navController = navController,
+                                )
+                            }
+
+                            composable<OrderSuccess>{
+                                shouldShowBottomNav.value = false
+                                val route = it.toRoute<OrderSuccess>()
+                                OrderSuccessScreen(
+                                    orderID = route.orderId,
+                                    navController = navController
                                 )
                             }
 

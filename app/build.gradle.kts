@@ -124,7 +124,8 @@ dependencies {
     implementation("com.google.android.gms:play-services-location:21.0.1")
     //Kotlinx coroutines for Google play services for location
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
-
+    //Stripe
+    implementation("com.stripe:stripe-android:21.4.2")
 
 
 

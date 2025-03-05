@@ -15,8 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 @Module
-@InstallIn(SingletonComponent::class)
-object NetworkModule {
+@InstallIn(SingletonComponent::class)object NetworkModule {
 
     @Provides
     fun provideOkHttpClient(foodHubSession: FoodHubSession): OkHttpClient {
@@ -32,9 +31,9 @@ object NetworkModule {
                     .build()
                 chain.proceed(request)
             }
-            .connectTimeout(30, TimeUnit.SECONDS)  // Connection timeout
-            .readTimeout(30, TimeUnit.SECONDS)    // Read timeout
-            .writeTimeout(30, TimeUnit.SECONDS)   // Write timeout
+            .connectTimeout(60, TimeUnit.SECONDS)  // Connection timeout
+            .readTimeout(60, TimeUnit.SECONDS)    // Read timeout
+            .writeTimeout(60, TimeUnit.SECONDS)   // Write timeout
             .build()
     }
 

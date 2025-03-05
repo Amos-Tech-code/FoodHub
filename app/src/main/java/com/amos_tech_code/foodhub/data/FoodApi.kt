@@ -2,7 +2,9 @@ package com.amos_tech_code.foodhub.data
 
 import com.amos_tech_code.foodhub.data.model.Address
 import com.amos_tech_code.foodhub.data.model.request.AddToCartRequest
+import com.amos_tech_code.foodhub.data.model.request.ConfirmPaymentRequest
 import com.amos_tech_code.foodhub.data.model.request.OauthRequest
+import com.amos_tech_code.foodhub.data.model.request.PaymentIntentRequest
 import com.amos_tech_code.foodhub.data.model.request.ReverseGeocodeRequest
 import com.amos_tech_code.foodhub.data.model.request.SignInRequest
 import com.amos_tech_code.foodhub.data.model.request.SignUpRequest
@@ -12,8 +14,10 @@ import com.amos_tech_code.foodhub.data.model.response.AddressResponse
 import com.amos_tech_code.foodhub.data.model.response.AuthResponse
 import com.amos_tech_code.foodhub.data.model.response.CartResponse
 import com.amos_tech_code.foodhub.data.model.response.CategoriesResponse
+import com.amos_tech_code.foodhub.data.model.response.ConfirmPaymentResponse
 import com.amos_tech_code.foodhub.data.model.response.GenericMsgResponse
 import com.amos_tech_code.foodhub.data.model.response.FoodItemResponse
+import com.amos_tech_code.foodhub.data.model.response.PaymentIntentResponse
 import com.amos_tech_code.foodhub.data.model.response.RestaurantsResponse
 import retrofit2.Response
 import retrofit2.http.Body
@@ -67,5 +71,14 @@ interface FoodApi {
 
     @POST("/addresses")
     suspend fun storeAddress(@Body request: Address) : Response<GenericMsgResponse>
+
+    @POST("/payments/create-intent")
+    suspend fun getPaymentIntent(@Body request: PaymentIntentRequest) : Response<PaymentIntentResponse>
+
+    @POST("payments/confirm/{paymentIntentId}")
+    suspend fun verifyPurchase(
+        @Body request: ConfirmPaymentRequest,
+        @Path("paymentIntentId") paymentIntentId: String
+    ) : Response<ConfirmPaymentResponse>
 
 }
