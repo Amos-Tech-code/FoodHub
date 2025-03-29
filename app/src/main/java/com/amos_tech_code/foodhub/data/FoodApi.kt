@@ -3,6 +3,7 @@ package com.amos_tech_code.foodhub.data
 import com.amos_tech_code.foodhub.data.model.Address
 import com.amos_tech_code.foodhub.data.model.request.AddToCartRequest
 import com.amos_tech_code.foodhub.data.model.request.ConfirmPaymentRequest
+import com.amos_tech_code.foodhub.data.model.request.FCMTokenRequest
 import com.amos_tech_code.foodhub.data.model.request.OauthRequest
 import com.amos_tech_code.foodhub.data.model.request.PaymentIntentRequest
 import com.amos_tech_code.foodhub.data.model.request.ReverseGeocodeRequest
@@ -17,6 +18,9 @@ import com.amos_tech_code.foodhub.data.model.response.CategoriesResponse
 import com.amos_tech_code.foodhub.data.model.response.ConfirmPaymentResponse
 import com.amos_tech_code.foodhub.data.model.response.GenericMsgResponse
 import com.amos_tech_code.foodhub.data.model.response.FoodItemResponse
+import com.amos_tech_code.foodhub.data.model.response.NotificationListResponse
+import com.amos_tech_code.foodhub.data.model.response.Order
+import com.amos_tech_code.foodhub.data.model.response.OrderListResponse
 import com.amos_tech_code.foodhub.data.model.response.PaymentIntentResponse
 import com.amos_tech_code.foodhub.data.model.response.RestaurantsResponse
 import retrofit2.Response
@@ -25,6 +29,7 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -80,5 +85,20 @@ interface FoodApi {
         @Body request: ConfirmPaymentRequest,
         @Path("paymentIntentId") paymentIntentId: String
     ) : Response<ConfirmPaymentResponse>
+
+    @GET("/orders")
+    suspend fun getOrders() : Response<OrderListResponse>
+
+    @GET("/orders/{id}")
+    suspend fun getOrderDetails(@Path("id") id: String) : Response<Order>
+
+    @PUT("/notifications/fcm-token")
+    suspend fun updateFCMToken(@Body request: FCMTokenRequest) : Response<GenericMsgResponse>
+
+    @POST("/notifications/{id}/read")
+    suspend fun readNotification(@Path("id") id: String) : Response<GenericMsgResponse>
+
+    @GET("/notifications")
+    suspend fun getNotifications() : Response<NotificationListResponse>
 
 }

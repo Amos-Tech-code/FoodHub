@@ -110,6 +110,9 @@ fun SharedTransitionScope.HomeScreen(
                     horizontalAlignment = CenterHorizontally
                 ) {
                     Text(text = "Empty Api Response")
+                    TextButton(onClick = { viewModel.retry() }) {
+                        Text(text = "Retry")
+                    }
                 }
             }
 

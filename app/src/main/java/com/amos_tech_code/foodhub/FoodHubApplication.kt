@@ -2,13 +2,20 @@ package com.amos_tech_code.foodhub
 
 import android.app.Application
 import android.content.pm.PackageManager
+import com.amos_tech_code.foodhub.notification.FoodHubNotificationManager
 import dagger.hilt.android.HiltAndroidApp
+import javax.inject.Inject
 
 @HiltAndroidApp
 class FoodHubApplication : Application() {
+
+    @Inject
+    lateinit var foodHubNotificationManager: FoodHubNotificationManager
     override fun onCreate() {
         super.onCreate()
 
+        foodHubNotificationManager.createChannels()
+        foodHubNotificationManager.getAndStoreToken()
         updateMetaData()
     }
 

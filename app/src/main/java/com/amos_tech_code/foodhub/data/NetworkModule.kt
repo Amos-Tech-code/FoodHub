@@ -15,7 +15,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 @Module
-@InstallIn(SingletonComponent::class)object NetworkModule {
+@InstallIn(SingletonComponent::class)
+object NetworkModule {
 
     @Provides
     fun provideOkHttpClient(foodHubSession: FoodHubSession): OkHttpClient {
@@ -41,7 +42,7 @@ import java.util.concurrent.TimeUnit
     fun provideRetrofit(client: OkHttpClient) : Retrofit {
 
         return Retrofit.Builder()
-            .baseUrl("http://192.168.100.8:8080")
+            .baseUrl("http://192.168.100.24:8080")
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

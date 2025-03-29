@@ -8,7 +8,7 @@ sealed class NavItems(val route: NavRoute, val icon: Int) {
 
     data object Notifications : NavItems(Notification, R.drawable.ic_notification)
 
-    data object Orders : NavItems(com.amos_tech_code.foodhub.ui.presentation.navigation.Orders, R.drawable.ic_delivery)
+    data object Orders : NavItems(OrderList, R.drawable.ic_delivery)
 
     data object Cart : NavItems(com.amos_tech_code.foodhub.ui.presentation.navigation.Cart, R.drawable.ic_cart)
 }

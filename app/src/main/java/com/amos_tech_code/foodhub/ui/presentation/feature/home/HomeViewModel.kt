@@ -91,6 +91,21 @@ class HomeViewModel @Inject constructor(
 
     }
 
+    fun retry() {
+        _uiState.value = HomeScreenState.Loading
+        viewModelScope.launch {
+            categories = getCategories()
+            restaurants = getPopularRestaurants()
+
+            if (categories.isNotEmpty() && restaurants.isNotEmpty()) {
+                _uiState.value = HomeScreenState.Success
+            } else {
+                _uiState.value = HomeScreenState.Empty
+            }
+        }
+    }
+
+
     fun logOut() {
         viewModelScope.launch {
             foodHubSession.clearSession()

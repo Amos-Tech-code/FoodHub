@@ -35,9 +35,6 @@ data object Cart : NavRoute
 data object Notification : NavRoute
 
 @Serializable
-data object Orders : NavRoute
-
-@Serializable
 data object AddressList : NavRoute
 
 @Serializable
@@ -45,3 +42,9 @@ data object AddAddress : NavRoute
 
 @Serializable
 data class OrderSuccess(val orderId: String) : NavRoute
+
+@Serializable
+data object OrderList : NavRoute
+
+@Serializable
+data class OrderDetails(val orderId: String) : NavRoute
