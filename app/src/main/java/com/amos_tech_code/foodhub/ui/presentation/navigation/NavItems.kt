@@ -11,4 +11,6 @@ sealed class NavItems(val route: NavRoute, val icon: Int) {
     data object Orders : NavItems(OrderList, R.drawable.ic_delivery)
 
     data object Cart : NavItems(com.amos_tech_code.foodhub.ui.presentation.navigation.Cart, R.drawable.ic_cart)
+
+    data object Menu : NavItems(ListMenuItems, android.R.drawable.ic_menu_more)
 }

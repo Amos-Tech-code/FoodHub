@@ -35,7 +35,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -53,7 +52,7 @@ import com.amos_tech_code.foodhub.ui.presentation.GroupSocialButtons
 import com.amos_tech_code.foodhub.ui.presentation.navigation.AuthScreen
 import com.amos_tech_code.foodhub.ui.presentation.navigation.Home
 import com.amos_tech_code.foodhub.ui.presentation.navigation.Login
-import com.amos_tech_code.foodhub.ui.theme.Orange
+import com.amos_tech_code.foodhub.ui.theme.Primary
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -168,7 +167,7 @@ fun SignUpScreen(
             Button(
                 onClick = { viewModel.onSignUpClicked() },
                 modifier = Modifier.height(48.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Orange)
+                colors = ButtonDefaults.buttonColors(containerColor = Primary)
             ) {
                 Box {
 

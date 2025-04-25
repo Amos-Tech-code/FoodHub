@@ -53,7 +53,7 @@ import com.amos_tech_code.foodhub.ui.presentation.GroupSocialButtons
 import com.amos_tech_code.foodhub.ui.presentation.navigation.AuthScreen
 import com.amos_tech_code.foodhub.ui.presentation.navigation.Home
 import com.amos_tech_code.foodhub.ui.presentation.navigation.SignUp
-import com.amos_tech_code.foodhub.ui.theme.Orange
+import com.amos_tech_code.foodhub.ui.theme.Primary
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -61,6 +61,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun LoginScreen(
     navController: NavController,
+    isCustomer: Boolean = true,
     viewModel: SignInViewModel = hiltViewModel()
 ) {
     val email = viewModel.email.collectAsStateWithLifecycle()
@@ -171,7 +172,7 @@ fun LoginScreen(
             Button(
                 onClick = { viewModel.onSignInClicked() },
                 modifier = Modifier.height(48.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Orange)
+                colors = ButtonDefaults.buttonColors(containerColor = Primary)
             ) {
                 Box {
                     AnimatedContent(targetState = loading.value,
@@ -201,20 +202,23 @@ fun LoginScreen(
                 }
             }
             Spacer(modifier = Modifier.size(16.dp))
-            Text(
-                text = stringResource(id = R.string.dont_have_account),
-                modifier = Modifier
-                    .padding(8.dp)
-                    .clickable {
-                        viewModel.onSignUpClicked()
-                    }
-                    .fillMaxWidth(),
-                textAlign = TextAlign.Center
-            )
-            GroupSocialButtons(
-                color = Color.Black,
-                viewModel = viewModel,
-            )
+
+            if (isCustomer) {
+                Text(
+                    text = stringResource(id = R.string.dont_have_account),
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .clickable {
+                            viewModel.onSignUpClicked()
+                        }
+                        .fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
+                GroupSocialButtons(
+                    color = Color.Black,
+                    viewModel = viewModel,
+                )
+            }
         }
     }
 

@@ -42,7 +42,6 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.amos_tech_code.foodhub.R
 import com.amos_tech_code.foodhub.ui.presentation.BasicDialog
@@ -52,7 +51,7 @@ import com.amos_tech_code.foodhub.ui.presentation.navigation.Home
 import com.amos_tech_code.foodhub.ui.presentation.navigation.Login
 import com.amos_tech_code.foodhub.ui.presentation.navigation.SignUp
 import com.amos_tech_code.foodhub.ui.theme.DarkBlue
-import com.amos_tech_code.foodhub.ui.theme.Orange
+import com.amos_tech_code.foodhub.ui.theme.Primary
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -60,6 +59,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun AuthScreen(
     navController: NavController,
+    isCustomer: Boolean = true,
     viewModel: AuthScreenViewModel = hiltViewModel()
 ) {
 
@@ -142,7 +142,7 @@ fun AuthScreen(
         ) {
             Text(
                 text = stringResource(R.string.skip),
-                color = Orange
+                color = Primary
             )
         }
 
@@ -161,7 +161,7 @@ fun AuthScreen(
             )
             Text(
                 text = stringResource(id = R.string.food_hub),
-                color = Orange,
+                color = Primary,
                 modifier = Modifier,
                 fontSize = 50.sp,
                 fontWeight = FontWeight.Bold
@@ -182,22 +182,24 @@ fun AuthScreen(
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            GroupSocialButtons(
-               viewModel = viewModel
-            )
+            if (isCustomer) {
+                GroupSocialButtons(
+                    viewModel = viewModel
+                )
 
-            Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-            Button(
-                onClick = {
-                    navController.navigate(SignUp)
-                },
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray.copy(alpha = 0.2f)),
-                shape = RoundedCornerShape(32.dp),
-                border = BorderStroke(1.dp, Color.White)
-            ) {
-                Text(text = stringResource(id = R.string.sign_with_email), color = Color.White)
+                Button(
+                    onClick = {
+                        navController.navigate(SignUp)
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Gray.copy(alpha = 0.2f)),
+                    shape = RoundedCornerShape(32.dp),
+                    border = BorderStroke(1.dp, Color.White)
+                ) {
+                    Text(text = stringResource(id = R.string.sign_with_email), color = Color.White)
+                }
             }
 
             TextButton(
@@ -223,7 +225,7 @@ fun AuthScreen(
                         .background(shape = RoundedCornerShape(8.dp), color = Color.White)
                         .size(80.dp)
                 ) {
-                    CircularProgressIndicator(color = Orange)
+                    CircularProgressIndicator(color = Primary)
                 }
             }
         }

@@ -68,6 +68,24 @@ android {
         buildConfig = true
         resValues = true
     }
+
+    flavorDimensions += "environment"
+
+    productFlavors {
+        create("customer") {
+            dimension = "environment"
+        }
+        create("restaurant") {
+            dimension = "environment"
+            applicationIdSuffix = ".restaurant"
+            resValue("string", "app_name", "Restaurant App")
+        }
+        create("rider") {
+            dimension = "environment"
+            applicationIdSuffix = ".rider"
+            resValue("string", "app_name", "Rider App")
+        }
+    }
 }
 
 dependencies {
@@ -120,7 +138,7 @@ dependencies {
     implementation("androidx.compose.foundation:foundation:1.7.7")
     // Compose Animation
     implementation("androidx.compose.animation:animation:1.7.7")
-    // Android Maps Compose composable for the Maps SDK for Android
+    //Android Maps Compose composable for the Maps SDK for Android
     implementation("com.google.maps.android:maps-compose:6.4.1")
     //Google play services for location
     implementation("com.google.android.gms:play-services-location:21.0.1")
@@ -131,6 +149,9 @@ dependencies {
     //Firebase
     implementation(platform("com.google.firebase:firebase-bom:33.10.0"))
     implementation("com.google.firebase:firebase-messaging-ktx")
+    //Google Maps Utils
+    implementation("com.google.maps.android:android-maps-utils:3.8.2")
+
 
 }
 
