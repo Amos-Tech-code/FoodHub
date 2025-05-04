@@ -16,6 +16,15 @@ class FoodHubSession(private val context: Context) {
         return sharedPreferences.getString("token", null)  // Directly return the value
     }
 
+    fun storeProfilePicUrl(url: String) {
+        sharedPreferences.edit().putString("profilePicUrl", url).apply()
+    }
+
+    fun getProfilePicUrl(): String? {
+        return sharedPreferences.getString("profilePicUrl", null)
+
+    }
+
     fun storeRestaurantId(restaurantId: String) {
         sharedPreferences.edit().putString("restaurantId", restaurantId).apply()
     }

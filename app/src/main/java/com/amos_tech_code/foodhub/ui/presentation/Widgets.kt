@@ -2,6 +2,7 @@
 
 import android.annotation.SuppressLint
 import androidx.activity.ComponentActivity
+import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -21,23 +22,30 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -47,12 +55,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
@@ -301,6 +311,71 @@ fun <T> LazyListScope.gridItems(
         }
     }
 }
+
+
+ @Composable
+ fun ErrorScreen(
+     message: String,
+     onRetry: () -> Unit,
+     icon: ImageVector = Icons.Default.Info, // Default icon
+     modifier: Modifier = Modifier,
+     iconTint: Color = MaterialTheme.colorScheme.error, // Optional custom tint
+     showSupportAction: Boolean = false // Toggle support button
+ ) {
+     Column(
+         modifier = modifier
+             .fillMaxSize()
+             .padding(24.dp),
+         horizontalAlignment = Alignment.CenterHorizontally,
+         verticalArrangement = Arrangement.Center
+     ) {
+         // Customizable Error Icon
+         Icon(
+             imageVector = icon,
+             contentDescription = "Error",
+             tint = iconTint,
+             modifier = Modifier.size(80.dp)
+         )
+
+         Spacer(modifier = Modifier.height(16.dp))
+
+         // Error Title
+         Text(
+             text = "Something Went Wrong",
+             style = MaterialTheme.typography.headlineSmall,
+             fontWeight = FontWeight.Bold,
+             color = MaterialTheme.colorScheme.onSurface
+         )
+
+         Spacer(modifier = Modifier.height(8.dp))
+
+         // Error Message
+         Text(
+             text = message,
+             style = MaterialTheme.typography.bodyMedium,
+             color = MaterialTheme.colorScheme.onSurfaceVariant,
+             textAlign = TextAlign.Center
+         )
+
+         Spacer(modifier = Modifier.height(32.dp))
+
+         // Retry Button
+         Button(
+             onClick = onRetry,
+             shape = RoundedCornerShape(8.dp),
+             modifier = Modifier.widthIn(min = 200.dp)
+         ) {
+             Text("Retry", fontWeight = FontWeight.Medium)
+         }
+
+         // Conditional Support Link
+         if (showSupportAction) {
+             TextButton(onClick = { /* Open support */ }) {
+                 Text("Contact Support", color = MaterialTheme.colorScheme.primary)
+             }
+         }
+     }
+ }
 
 
 @Composable

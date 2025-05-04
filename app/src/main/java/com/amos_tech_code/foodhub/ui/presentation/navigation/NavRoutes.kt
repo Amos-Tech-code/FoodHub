@@ -1,6 +1,7 @@
 package com.amos_tech_code.foodhub.ui.presentation.navigation
 
 import com.amos_tech_code.foodhub.data.model.response.FoodItem
+import com.amos_tech_code.foodhub.model.UIFoodItem
 import kotlinx.serialization.Serializable
 
 interface NavRoute
@@ -18,6 +19,9 @@ object AuthScreen : NavRoute
 object Home : NavRoute
 
 @Serializable
+object Profile : NavRoute
+
+@Serializable
 data class RestaurantsDetails(
     val name: String,
     val imgUrl: String,
@@ -26,7 +30,7 @@ data class RestaurantsDetails(
 ) : NavRoute
 
 @Serializable
-data class FoodDetails(val foodItem: FoodItem) : NavRoute
+data class FoodDetails(val foodItem: UIFoodItem) : NavRoute
 
 @Serializable
 data object Cart : NavRoute
@@ -48,6 +52,24 @@ data object OrderList : NavRoute
 
 @Serializable
 data class OrderDetails(val orderId: String) : NavRoute
+
+@Serializable
+data object PaymentMethod : NavRoute
+
+@Serializable
+data object ContactUs : NavRoute
+
+@Serializable
+data object Settings : NavRoute
+
+@Serializable
+data object Favourite : NavRoute
+
+@Serializable
+data object HelpAndSupport : NavRoute
+
+@Serializable
+data object FoodCategory : NavRoute
 
 @Serializable
 data object AddMenuItem : NavRoute

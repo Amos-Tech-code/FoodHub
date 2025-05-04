@@ -60,6 +60,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun SignUpScreen(
     navController: NavController,
+    isCustomer: Boolean = true,
     viewModel: SignUpViewModel = hiltViewModel()
 ) {
 
@@ -204,10 +205,12 @@ fun SignUpScreen(
                     .fillMaxWidth(),
                 textAlign = TextAlign.Center
             )
-            GroupSocialButtons(
-                color = Color.Black,
-                viewModel = viewModel
-            )
+            if(isCustomer) {
+                GroupSocialButtons(
+                    color = Color.Black,
+                    viewModel = viewModel
+                )
+            }
         }
     }
 

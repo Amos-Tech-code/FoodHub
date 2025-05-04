@@ -203,17 +203,18 @@ fun LoginScreen(
             }
             Spacer(modifier = Modifier.size(16.dp))
 
+            Text(
+                text = stringResource(id = R.string.dont_have_account),
+                modifier = Modifier
+                    .padding(8.dp)
+                    .clickable {
+                        viewModel.onSignUpClicked()
+                    }
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
+
             if (isCustomer) {
-                Text(
-                    text = stringResource(id = R.string.dont_have_account),
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .clickable {
-                            viewModel.onSignUpClicked()
-                        }
-                        .fillMaxWidth(),
-                    textAlign = TextAlign.Center
-                )
                 GroupSocialButtons(
                     color = Color.Black,
                     viewModel = viewModel,
