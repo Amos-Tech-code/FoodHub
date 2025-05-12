@@ -67,20 +67,20 @@ class SignUpViewModel @Inject constructor(
                         _uiState.value = SignUpEvent.Success
                         _navigationEvent.emit(SignUpNavigationEvent.NavigateToHome)
                     }
-
-                    else -> {
-                        val errr = (response as? ApiResponse.Error)?.code ?: 0
+                    is ApiResponse.Error -> {
                         error = "Sign Up Failed"
-                        errorDescription = "Failed to sign up"
-
-                        when (errr) {
-                            400 -> {
-                                error = "Invalid Credentials"
-                                errorDescription = "Please enter correct details."
-                            }
-                        }
-                        _uiState.value = SignUpEvent.Error(error)
+                        errorDescription = response.message
+                        _uiState.value = SignUpEvent.Error(response.message)
+                        _navigationEvent.emit(SignUpNavigationEvent.ShowErrorMessage)
                     }
+
+                    is ApiResponse.Exception -> {
+                        error = "Sign Up Failed"
+                        errorDescription = response.exception.message ?: "Unknown Error"
+                        _uiState.value = SignUpEvent.Error(response.exception.message ?: "Unknown Error")
+                        _navigationEvent.emit(SignUpNavigationEvent.ShowErrorMessage)
+                    }
+
                 }
 
 
@@ -135,6 +135,8 @@ sealed class SignUpNavigationEvent {
     data object NavigateToLogin : SignUpNavigationEvent()
 
     data object NavigateToHome : SignUpNavigationEvent()
+
+    data object ShowErrorMessage : SignUpNavigationEvent()
 }
 
 sealed class SignUpEvent {

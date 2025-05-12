@@ -34,6 +34,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -63,6 +64,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
@@ -142,6 +144,10 @@ fun SocialButton(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(containerColor = Color.White),
         shape = RoundedCornerShape(32.dp),
+        elevation = ButtonDefaults.buttonElevation(
+            defaultElevation = 4.dp,
+            pressedElevation = 0.dp
+        )
     ) {
         Row(
             modifier = Modifier.height(38.dp),
@@ -315,10 +321,10 @@ fun <T> LazyListScope.gridItems(
 
  @Composable
  fun ErrorScreen(
+     modifier: Modifier = Modifier,
      message: String,
      onRetry: () -> Unit,
      icon: ImageVector = Icons.Default.Info, // Default icon
-     modifier: Modifier = Modifier,
      iconTint: Color = MaterialTheme.colorScheme.error, // Optional custom tint
      showSupportAction: Boolean = false // Toggle support button
  ) {
@@ -377,8 +383,75 @@ fun <T> LazyListScope.gridItems(
      }
  }
 
+ @Composable
+ fun LoadingScreenWithText(
+     text: String = "Loading..."
+ ) {
+     Column(
+         modifier = Modifier.fillMaxSize(),
+         horizontalAlignment = Alignment.CenterHorizontally,
+         verticalArrangement = Arrangement.Center
+     ) {
+         CircularProgressIndicator()
+         Text(text = text)
+     }
+ }
 
-@Composable
+
+ @Composable
+ fun EmptyState(
+     modifier: Modifier = Modifier,
+     title: String,
+     description: String? = null,
+     icon: @Composable (() -> Unit)? = null,
+     action: @Composable (() -> Unit)? = null
+ ) {
+     Column(
+         horizontalAlignment = Alignment.CenterHorizontally,
+         verticalArrangement = Arrangement.Center,
+         modifier = modifier
+             .fillMaxWidth()
+             .padding(24.dp)
+     ) {
+         // Optional icon
+         icon?.invoke() ?: Icon(
+             imageVector = Icons.Outlined.Info,
+             contentDescription = null,
+             modifier = Modifier.size(64.dp),
+             tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+         )
+
+         Spacer(modifier = Modifier.height(16.dp))
+
+         // Title
+         Text(
+             text = title,
+             style = MaterialTheme.typography.titleMedium,
+             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.87f),
+             textAlign = TextAlign.Center
+         )
+
+         // Optional description
+         description?.let {
+             Spacer(modifier = Modifier.height(8.dp))
+             Text(
+                 text = description,
+                 style = MaterialTheme.typography.bodyMedium,
+                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                 textAlign = TextAlign.Center
+             )
+         }
+
+         // Optional action button
+         action?.let {
+             Spacer(modifier = Modifier.height(24.dp))
+             action.invoke()
+         }
+     }
+ }
+
+
+ @Composable
 fun FoodHubNavHost(
     navController: NavHostController,
     startDestination: Any,

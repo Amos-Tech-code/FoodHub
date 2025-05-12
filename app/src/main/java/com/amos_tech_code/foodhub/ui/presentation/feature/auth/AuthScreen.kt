@@ -17,6 +17,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -100,137 +101,149 @@ fun AuthScreen(
         }
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black)
-    ) {
-        val uiState = viewModel.uiState.collectAsState()
-        val loading = remember { mutableStateOf(false) }
-
-        when(uiState.value) {
-            is AuthScreenViewModel.AuthEvent.Loading -> {
-                loading.value = true
-            }
-            else -> {
-                loading.value = false
-            }
-        }
-        Image(
-            painter = painterResource(R.drawable.background_img),
-            contentDescription = null,
-            modifier = Modifier
-                .fillMaxSize()
-                .onGloballyPositioned {
-                    imageSize.value = it.size
-                }
-                .alpha(0.6f),
-            contentScale = ContentScale.FillBounds
-        )
+    Scaffold { innerPadding ->
         Box(
             modifier = Modifier
-                .matchParentSize()
-                .background(brush = brush)
-        )
-
-        Button(
-            onClick = { /*TODO*/ },
-            colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(8.dp)
+                .fillMaxSize()
+                .padding(innerPadding)
+                .background(Color.Black)
         ) {
-            Text(
-                text = stringResource(R.string.skip),
-                color = Primary
-            )
-        }
+            val uiState = viewModel.uiState.collectAsState()
+            val loading = remember { mutableStateOf(false) }
 
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 110.dp)
-                .padding(16.dp)
-        ) {
-            Text(
-                text = stringResource(id = R.string.welcome),
-                color = Color.Black,
-                modifier = Modifier,
-                fontSize = 50.sp,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = stringResource(id = R.string.food_hub),
-                color = Primary,
-                modifier = Modifier,
-                fontSize = 50.sp,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = stringResource(id = R.string.food_hub_desc),
-                color = Color.Black,
-                fontSize = 20.sp,
-                modifier = Modifier.padding(vertical = 16.dp)
-            )
+            when (uiState.value) {
+                is AuthScreenViewModel.AuthEvent.Loading -> {
+                    loading.value = true
+                }
 
-        }
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter)
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            if (isCustomer) {
-                GroupSocialButtons(
-                    viewModel = viewModel
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Button(
-                    onClick = {
-                        navController.navigate(SignUp)
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Gray.copy(alpha = 0.2f)),
-                    shape = RoundedCornerShape(32.dp),
-                    border = BorderStroke(1.dp, Color.White)
-                ) {
-                    Text(text = stringResource(id = R.string.sign_with_email), color = Color.White)
+                else -> {
+                    loading.value = false
                 }
             }
-
-            TextButton(
-                onClick = {
-                    navController.navigate(Login)
-                }
-            ) {
-                Text(text = stringResource(id = R.string.already_have_account), color = Color.White)
-            }
-
-        }
-
-        if (loading.value) {
-            Box(
+            Image(
+                painter = painterResource(R.drawable.background_img),
+                contentDescription = null,
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.Black.copy(alpha = 0.5f))
+                    .onGloballyPositioned {
+                        imageSize.value = it.size
+                    }
+                    .alpha(0.6f),
+                contentScale = ContentScale.FillBounds
+            )
+            Box(
+                modifier = Modifier
+                    .matchParentSize()
+                    .background(brush = brush)
+            )
+
+            Button(
+                onClick = {
+                    navController.navigate(Login)
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(8.dp)
             ) {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .background(shape = RoundedCornerShape(8.dp), color = Color.White)
-                        .size(80.dp)
+                Text(
+                    text = stringResource(R.string.skip),
+                    color = Primary
+                )
+            }
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 110.dp)
+                    .padding(16.dp)
+            ) {
+                Text(
+                    text = stringResource(id = R.string.welcome),
+                    color = Color.Black,
+                    modifier = Modifier,
+                    fontSize = 50.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = stringResource(id = R.string.food_hub),
+                    color = Primary,
+                    modifier = Modifier,
+                    fontSize = 50.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = stringResource(id = R.string.food_hub_desc),
+                    color = Color.Black,
+                    fontSize = 20.sp,
+                    modifier = Modifier.padding(vertical = 16.dp)
+                )
+
+            }
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                if (isCustomer) {
+                    GroupSocialButtons(
+                        viewModel = viewModel
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Button(
+                        onClick = {
+                            navController.navigate(SignUp)
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray.copy(alpha = 0.2f)),
+                        shape = RoundedCornerShape(32.dp),
+                        border = BorderStroke(1.dp, Color.White)
+                    ) {
+                        Text(
+                            text = "Sign Up with email",
+                            color = Color.White
+                        )
+                    }
+                }
+
+                TextButton(
+                    onClick = {
+                        navController.navigate(Login)
+                    }
                 ) {
-                    CircularProgressIndicator(color = Primary)
+                    Text(
+                        text = stringResource(id = R.string.already_have_account),
+                        color = Color.White
+                    )
+                }
+
+            }
+
+            if (loading.value) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Black.copy(alpha = 0.5f))
+                ) {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .background(shape = RoundedCornerShape(8.dp), color = Color.White)
+                            .size(80.dp)
+                    ) {
+                        CircularProgressIndicator(color = Primary)
+                    }
                 }
             }
+
+
         }
-
-
     }
 
     if (showDialog) {

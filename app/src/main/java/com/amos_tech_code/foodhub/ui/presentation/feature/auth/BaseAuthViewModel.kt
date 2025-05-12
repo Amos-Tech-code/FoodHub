@@ -93,19 +93,11 @@ abstract class BaseAuthViewModel(open val foodApi: FoodApi) : ViewModel() {
                     is ApiResponse.Success -> {
                         onSocialLoginSuccess(res.data.token)
                     }
-
-                    else -> {
-                        val error = (res as? ApiResponse.Error)?.code
-                        if (error != null) {
-                            when (error) {
-                                401 -> onError("Invalid Token")
-                                500 -> onError("Server Error")
-                                404 -> onError("Not Found")
-                                else -> onError("Failed")
-                            }
-                        } else {
-                            onError("Failed")
-                        }
+                    is ApiResponse.Error -> {
+                        onError(res.message)
+                    }
+                    is ApiResponse.Exception -> {
+                        onError(res.exception.message ?: "Unknown Error")
                     }
                 }
             }

@@ -15,7 +15,7 @@ import javax.inject.Inject
 class AuthScreenViewModel @Inject constructor(
     override val foodApi: FoodApi,
     private val session: FoodHubSession
-) : BaseAuthViewModel(foodApi){
+) : BaseAuthViewModel(foodApi) {
 
     private val _uiState = MutableStateFlow<AuthEvent>(AuthEvent.Nothing)
     val uiState = _uiState.asStateFlow()

@@ -58,19 +58,17 @@ class SignInViewModel @Inject constructor(
                     session.storeToken(response.data.token)
                     _navigationEvent.emit(SignInNavigationEvent.NavigateToHome)
                 }
-
-                else -> {
-                    val errr = (response as? ApiResponse.Error)?.code ?: 0
+                is ApiResponse.Error -> {
                     error = "Sign In Failed"
-                    errorDescription = "Failed to sign up"
-                    when (errr) {
-                        400 -> {
-                            error = "Invalid Credentials"
-                            errorDescription = "Please enter correct details."
-                        }
-                    }
-                    _uiState.value = SignInEvent.Error(error)
+                    errorDescription = response.message
+                    _uiState.value = SignInEvent.Error(response.message)
                 }
+                is ApiResponse.Exception -> {
+                    error = "Sign In Failed"
+                    errorDescription = response.exception.message ?: "Unknown Error"
+                    _uiState.value = SignInEvent.Error(response.exception.message ?: "Unknown Error")
+                }
+
             }
         }
 

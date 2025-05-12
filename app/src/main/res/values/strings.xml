@@ -19,4 +19,125 @@
 
     <string name="fb_login_protocol_scheme">fb1234</string>
 
+    <!-- Settings Screen -->
+    <string name="settings_title">Settings</string>
+    <string name="cd_back">Back</string>
+    <string name="cd_navigate">Navigate</string>
+
+    <!-- Sections -->
+    <string name="settings_profile">Profile</string>
+    <string name="settings_preferences">Preferences</string>
+    <string name="settings_order_settings">Order Settings</string>
+    <string name="settings_support">Support</string>
+
+    <!-- Settings Items -->
+    <string name="settings_account">Account Information</string>
+    <string name="settings_notifications">Notifications</string>
+    <string name="settings_dark_mode">Dark Mode</string>
+    <string name="settings_payment_methods">Payment Methods</string>
+    <string name="settings_saved_addresses">Saved Addresses</string>
+    <string name="settings_help">Help Center</string>
+    <string name="settings_about">About FoodExpress</string>
+    <string name="settings_logout">Log Out</string>
+
+    <!-- App Version -->
+    <string name="settings_version">Version %s</string>
+
+    <!-- Accessibility -->
+    <string name="cd_account_icon">Account icon</string>
+    <string name="cd_notifications_icon">Notifications icon</string>
+    <string name="cd_theme_icon">Theme icon</string>
+    <string name="cd_payment_icon">Payment icon</string>
+    <string name="cd_address_icon">Address icon</string>
+    <string name="cd_help_icon">Help icon</string>
+    <string name="cd_info_icon">Information icon</string>
+
+    <!-- Contact Screen Titles -->
+    <string name="contact_title">Contact Us</string>
+    <string name="contact_support_title">Customer Support</string>
+    <string name="contact_social_title">Social Media</string>
+    <string name="contact_feedback_title">Send Feedback</string>
+
+    <!-- Contact Methods -->
+    <string name="contact_call_us">Call Us</string>
+    <string name="contact_24_hours">24/7 Support</string>
+    <string name="contact_email_us">Email Us</string>
+    <string name="contact_response_time">Response within 2 hours</string>
+
+    <!-- Feedback Form -->
+    <string name="contact_feedback_hint">Your feedback helps us improve</string>
+    <string name="contact_submit_feedback">Submit Feedback</string>
+
+    <!-- FAQ -->
+    <string name="contact_view_faqs">View Frequently Asked Questions</string>
+    <!-- Screen Title -->
+    <string name="help_title">Help &amp; Support</string>
+
+    <!-- Section Titles -->
+    <string name="help_quick_help">Quick Help</string>
+    <string name="help_faq">Frequently Asked Questions</string>
+    <string name="help_articles">Help Articles</string>
+
+    <!-- Action Cards -->
+    <string name="help_live_chat">Live Chat</string>
+    <string name="help_live_chat_subtitle">Instant messaging with support</string>
+    <string name="help_call_support">Call Support</string>
+    <string name="help_call_subtitle">24/7 customer service</string>
+    <string name="help_email_support">Email Support</string>
+    <string name="help_email_subtitle">Response within 2 hours</string>
+
+    <!-- Help Articles -->
+    <string name="help_article_order_issues">Solving Order Issues</string>
+    <string name="help_article_payment_issues">Payment Problems</string>
+    <string name="help_article_delivery_issues">Delivery Questions</string>
+
+    <!-- Button -->
+    <string name="help_contact_support">Contact Support</string>
+    <!-- Screen Titles -->
+    <string name="payment_title">Payment Methods</string>
+    <string name="payment_add_card">Add Payment Method</string>
+
+    <!-- Section Headers -->
+    <string name="payment_credit_debit_cards">Credit/Debit Cards</string>
+
+    <!-- Card Info -->
+    <string name="payment_default_card">DEFAULT</string>
+    <string name="payment_edit">Edit</string>
+    <string name="payment_remove">Remove</string>
+
+    <!-- Security Info -->
+    <string name="payment_secure_payments">Secure Payments</string>
+    <string name="payment_security_description">Your payment information is processed securely with Stripe. We never store your card details on our servers.</string>
+
+    <!-- Accessibility -->
+    <string name="cd_card_type">Card type</string>
+    <string name="cd_selected">Selected</string>
+    <string name="cd_stripe_badge">Secured by Stripe</string>
+    <!-- Screen Titles -->
+    <string name="profile_title">My Profile</string>
+
+    <!-- Profile Header -->
+    <string name="profile_guest_user">Guest User</string>
+
+    <!-- Sections -->
+    <string name="profile_account">Account</string>
+    <string name="profile_orders">Orders</string>
+
+    <!-- Menu Items -->
+    <string name="profile_saved_addresses">Saved Addresses</string>
+    <string name="profile_payment_methods">Payment Methods</string>
+    <string name="profile_order_history">Order History</string>
+    <string name="profile_favorites">Favorites</string>
+
+    <!-- Actions -->
+    <string name="profile_logout">Log Out</string>
+
+    <!-- Accessibility -->
+    <string name="cd_profile_picture">Profile picture</string>
+    <string name="cd_edit_profile">Edit profile</string>
+    <string name="cd_settings">Settings</string>
+    <string name="show_password">Show Password</string>
+    <string name="hide_password">Hide Password</string>
+
+
 </resources>

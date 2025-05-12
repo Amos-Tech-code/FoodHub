@@ -1,6 +1,5 @@
 package com.amos_tech_code.foodhub.ui.presentation.navigation
 
-import com.amos_tech_code.foodhub.data.model.response.FoodItem
 import com.amos_tech_code.foodhub.model.UIFoodItem
 import kotlinx.serialization.Serializable
 
@@ -60,7 +59,7 @@ data object PaymentMethod : NavRoute
 data object ContactUs : NavRoute
 
 @Serializable
-data object Settings : NavRoute
+data object Setting : NavRoute
 
 @Serializable
 data object Favourite : NavRoute

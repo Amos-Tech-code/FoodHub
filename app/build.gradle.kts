@@ -106,10 +106,10 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    //Extended Material 3 icons
+    implementation(libs.androidx.material.icons.extended)
     //SplashScreen
     implementation(libs.core.splashscreen)
-    //System UI Controller
-    implementation(libs.accompanist.systemuicontroller)
     //Dagger-Hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)

@@ -1,5 +1,7 @@
 package com.amos_tech_code.foodhub.ui.presentation.navigation
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Help
 import com.amos_tech_code.foodhub.R
 
 sealed class NavItems(val route: NavRoute, val icon: Int) {
@@ -30,7 +32,7 @@ sealed class NavigationDrawerItems(
     )
 
     data object MyProfile : NavigationDrawerItems(
-        Home,
+        Profile,
         R.drawable.ic_profile,
         "My Profile"
     )
@@ -42,26 +44,26 @@ sealed class NavigationDrawerItems(
     )
 
     data object PaymentMethod : NavigationDrawerItems(
-        Home,
+        com.amos_tech_code.foodhub.ui.presentation.navigation.PaymentMethod,
         R.drawable.ic_wallet,
         "Payment Method"
 
     )
 
     data object ContactUs : NavigationDrawerItems(
-        Home,
+        com.amos_tech_code.foodhub.ui.presentation.navigation.ContactUs,
         R.drawable.ic_contact,
         "Contact Us"
     )
 
     data object Settings : NavigationDrawerItems(
-        Home,
+        Setting,
         R.drawable.ic_setting,
         "Settings"
     )
 
     data object HelpAndSupport : NavigationDrawerItems(
-        Home,
+        com.amos_tech_code.foodhub.ui.presentation.navigation.HelpAndSupport,
         R.drawable.ic_help,
         "Help & Support"
     )
