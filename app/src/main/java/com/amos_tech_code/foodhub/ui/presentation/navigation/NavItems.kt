@@ -1,7 +1,5 @@
 package com.amos_tech_code.foodhub.ui.presentation.navigation
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Help
 import com.amos_tech_code.foodhub.R
 
 sealed class NavItems(val route: NavRoute, val icon: Int) {
@@ -17,6 +15,8 @@ sealed class NavItems(val route: NavRoute, val icon: Int) {
     data object Cart : NavItems(com.amos_tech_code.foodhub.ui.presentation.navigation.Cart, R.drawable.ic_cart)
 
     data object Menu : NavItems(ListMenuItems, android.R.drawable.ic_menu_more)
+
+    data object Profile : NavItems(com.amos_tech_code.foodhub.ui.presentation.navigation.Profile, R.drawable.ic_profile)
 }
 
 sealed class NavigationDrawerItems(

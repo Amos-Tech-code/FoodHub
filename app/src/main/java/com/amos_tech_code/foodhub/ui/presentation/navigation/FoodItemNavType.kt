@@ -2,7 +2,7 @@ package com.amos_tech_code.foodhub.ui.presentation.navigation
 
 import android.os.Bundle
 import androidx.navigation.NavType
-import com.amos_tech_code.foodhub.model.UIFoodItem
+import com.amos_tech_code.foodhub.data.model.UIFoodItem
 import kotlinx.serialization.json.Json
 import java.net.URLDecoder
 import java.net.URLEncoder

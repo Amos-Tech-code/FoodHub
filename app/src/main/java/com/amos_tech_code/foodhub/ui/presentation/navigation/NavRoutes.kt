@@ -1,6 +1,6 @@
 package com.amos_tech_code.foodhub.ui.presentation.navigation
 
-import com.amos_tech_code.foodhub.model.UIFoodItem
+import com.amos_tech_code.foodhub.data.model.UIFoodItem
 import kotlinx.serialization.Serializable
 
 interface NavRoute
