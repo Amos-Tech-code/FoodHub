@@ -1,0 +1,98 @@
+package com.amos_tech_code.foodhub.ui.feature.orders.details
+
+import androidx.lifecycle.viewModelScope
+import com.amos_tech_code.foodhub.data.FoodApi
+import com.amos_tech_code.foodhub.data.model.response.Order
+import com.amos_tech_code.foodhub.data.remote.ApiResponse
+import com.amos_tech_code.foodhub.data.remote.safeApiCall
+import com.amos_tech_code.foodhub.ui.presentation.feature.orders.OrderDetailsBaseViewModel
+import com.amos_tech_code.foodhub.utils.OrderUtils
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+@HiltViewModel
+class OrderDetailsViewModel @Inject constructor(
+    private val foodApi: FoodApi,
+    locationUpdateSocketRepository: LocationUpdateSocketRepository
+) : OrderDetailsBaseViewModel(locationUpdateSocketRepository) {
+
+    val listOfStatus = OrderUtils.OrderStatus.entries.map { it.name }
+
+    private val _uiState = MutableStateFlow<OrderDetailsUiState>(OrderDetailsUiState.Loading)
+    val uiState = _uiState.asStateFlow()
+
+    private val _event = MutableSharedFlow<OrderDetailsEvent?>()
+    val event = _event.asSharedFlow()
+
+    var order: Order? = null
+
+    fun getOrderDetails(orderID: String) {
+        viewModelScope.launch {
+            _uiState.value = OrderDetailsUiState.Loading
+            val result = safeApiCall { foodApi.getOrderDetails(orderID) }
+            when (result) {
+                is ApiResponse.Success -> {
+                    if (result.data.status == OrderUtils.OrderStatus.OUT_FOR_DELIVERY.name) {
+                        _uiState.value = OrderDetailsUiState.OrderDelivery(result.data)
+                        result.data.riderId?.let {
+                            connectSocket(orderID, it)
+                        }
+                    } else {
+
+                        if (result.data.status == OrderUtils.OrderStatus.DELIVERED.name
+                            || result.data.status == OrderUtils.OrderStatus.CANCELLED.name
+                            || result.data.status == OrderUtils.OrderStatus.REJECTED.name
+                        ) {
+                            disconnectSocket()
+                        }
+                        _uiState.value = OrderDetailsUiState.Success(result.data)
+                    }
+                    order = result.data
+                }
+
+                is ApiResponse.Error -> {
+                    _uiState.value = OrderDetailsUiState.Error(result.message)
+                }
+
+                is ApiResponse.Exception -> {
+                    _uiState.value = OrderDetailsUiState.Error(result.exception.message ?: "An unknown error occurred")
+                }
+            }
+        }
+    }
+
+    fun updateOrderStatus(orderID: String, status: String) {
+        viewModelScope.launch {
+            val result =
+                safeApiCall { foodApi.updateOrderStatus(orderID, mapOf("status" to status)) }
+            when (result) {
+                is ApiResponse.Success -> {
+                    _event.emit(OrderDetailsEvent.ShowPopUp("Order Status updated"))
+                    getOrderDetails(orderID)
+                }
+
+                else -> {
+                    _event.emit(OrderDetailsEvent.ShowPopUp("Order Status update failed"))
+                }
+            }
+        }
+    }
+
+    sealed class OrderDetailsUiState {
+        data object Loading : OrderDetailsUiState()
+        data class Success(val order: Order) : OrderDetailsUiState()
+        data class OrderDelivery(val order: Order) : OrderDetailsUiState()
+        data class Error(val message: String) : OrderDetailsUiState()
+    }
+
+    sealed class OrderDetailsEvent {
+        data object NavigateBack : OrderDetailsEvent()
+        data class ShowPopUp(val msg: String) : OrderDetailsEvent()
+    }
+
+}
