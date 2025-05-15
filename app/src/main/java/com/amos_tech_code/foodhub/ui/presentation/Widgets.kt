@@ -410,7 +410,7 @@ fun <T> LazyListScope.gridItems(
          horizontalAlignment = Alignment.CenterHorizontally,
          verticalArrangement = Arrangement.Center,
          modifier = modifier
-             .fillMaxWidth()
+             .fillMaxSize()
              .padding(24.dp)
      ) {
          // Optional icon
