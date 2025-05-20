@@ -7,6 +7,7 @@ object OrderUtils {
         ACCEPTED,          // Restaurant accepted the order
         PREPARING,         // Food is being prepared
         READY,            // Ready for delivery/pickup
+        DELIVERED,        // Order completed
     }
 
 }

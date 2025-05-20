@@ -41,11 +41,11 @@ class OrderDetailsViewModel @Inject constructor(
                 }
 
                 is ApiResponse.Error -> {
-                    _uiState.value = OrderDetailsUiState.Error
+                    _uiState.value = OrderDetailsUiState.Error(result.message)
                 }
 
-                else -> {
-                    _uiState.value = OrderDetailsUiState.Error
+                is ApiResponse.Exception -> {
+                    _uiState.value = OrderDetailsUiState.Error(result.exception.message ?: "An unknown error occurred")
                 }
             }
         }
@@ -73,7 +73,7 @@ class OrderDetailsViewModel @Inject constructor(
 
         data class Success(val order: Order) : OrderDetailsUiState()
 
-        data object Error : OrderDetailsUiState()
+        data class Error(val message : String) : OrderDetailsUiState()
     }
 
     sealed class OrderDetailsEvent {

@@ -1,6 +1,7 @@
 package com.amos_tech_code.foodhub
 
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Bundle
 import android.view.View
@@ -14,7 +15,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
@@ -88,6 +88,7 @@ class MainActivity : BaseFoodHubActivity() {
     @Inject
     lateinit var session: FoodHubSession
 
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @OptIn(ExperimentalSharedTransitionApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -195,7 +196,7 @@ class MainActivity : BaseFoodHubActivity() {
                         }
                     }
 
-                ) { innerPadding ->
+                ) { @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 
                     val startDestination = if (session.getToken() != null) Home else AuthScreen
 
@@ -203,11 +204,11 @@ class MainActivity : BaseFoodHubActivity() {
                         FoodHubNavHost(
                             navController = navController,
                             startDestination = startDestination,
-                            modifier = Modifier.padding(innerPadding),
+                            //modifier = Modifier.padding(innerPadding),
                         ) {
                             composable<SignUp> {
                                 shouldShowBottomNav.value = false
-                                SignUpScreen(navController)
+                                SignUpScreen(navController, false)
                             }
 
                             composable<Login> {

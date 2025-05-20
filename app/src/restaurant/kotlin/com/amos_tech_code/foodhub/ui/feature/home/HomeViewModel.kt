@@ -8,7 +8,9 @@ import com.amos_tech_code.foodhub.data.model.response.Restaurant
 import com.amos_tech_code.foodhub.data.remote.ApiResponse
 import com.amos_tech_code.foodhub.data.remote.safeApiCall
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -21,6 +23,9 @@ class HomeViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow<HomeScreenState>(HomeScreenState.Loading)
     val uiState = _uiState.asStateFlow()
+
+    private val _event = MutableSharedFlow<HomeScreenEvent>()
+    val event = _event.asSharedFlow()
 
     init {
         getRestaurantProfile()
@@ -53,6 +58,13 @@ class HomeViewModel @Inject constructor(
         getRestaurantProfile()
     }
 
+    fun logOut() {
+        viewModelScope.launch {
+            session.clearSession()
+            _event.emit(HomeScreenEvent.NavigateToLogin)
+        }
+    }
+
     sealed class HomeScreenState {
 
         data object Loading : HomeScreenState()
@@ -61,4 +73,11 @@ class HomeViewModel @Inject constructor(
 
         data class Success(val data: Restaurant) : HomeScreenState()
     }
+
+    sealed class HomeScreenEvent {
+        data object NavigateToLogin : HomeScreenEvent()
+
+        data class ShowError(val message: String) : HomeScreenEvent()
+    }
+
 }

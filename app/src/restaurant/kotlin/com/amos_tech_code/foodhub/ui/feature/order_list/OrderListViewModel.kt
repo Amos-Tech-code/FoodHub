@@ -34,18 +34,21 @@ class OrderListViewModel @Inject constructor(
                 is ApiResponse.Success -> {
                     _uiState.value = OrdersScreenState.Success(response.data.orders)
                 }
-
-                else -> {
-                    _uiState.value = OrdersScreenState.Failed
+                is ApiResponse.Error -> {
+                    _uiState.value = OrdersScreenState.Failed(response.message)
+                }
+                is ApiResponse.Exception-> {
+                    _uiState.value = OrdersScreenState.Failed(response.exception.message ?: "An unknown error occurred")
                 }
             }
         }
     }
 
     sealed class OrdersScreenState {
+
         data object Loading : OrdersScreenState()
 
-        data object Failed : OrdersScreenState()
+        data class Failed(val message : String) : OrdersScreenState()
 
         data class Success(val data: List<Order>) : OrdersScreenState()
     }
