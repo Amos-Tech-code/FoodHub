@@ -79,7 +79,7 @@ class AddMenuItemViewModel @Inject constructor(
             _addMenuItemState.value = AddMenuItemState.Loading
             val imageUrl = uploadImage(imageUri = imageUrl.value!!)
             if (imageUrl == null) {
-                _addMenuItemState.value = AddMenuItemState.Error("Failed to upload image")
+                _addMenuItemState.value = AddMenuItemState.Error("Failed to upload image. Please try again later.")
                 return@launch
             }
             val response = safeApiCall {
@@ -105,25 +105,23 @@ class AddMenuItemViewModel @Inject constructor(
                 }
 
                 is ApiResponse.Exception -> {
-                    _addMenuItemState.value = AddMenuItemState.Error("Network Error")
+                    _addMenuItemState.value = AddMenuItemState.Error(response.exception.message ?: "An unknown error occurred")
                 }
             }
         }
     }
 
-    suspend fun uploadImage(imageUri: Uri): String? {
+    private suspend fun uploadImage(imageUri: Uri): String? {
         val file = fileFromUri(imageUri)
         val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
         val multipartBody = MultipartBody.Part.createFormData("image", file.name, requestBody)
         val response = safeApiCall { foodApi.uploadImage(multipartBody) }
-        when (response) {
+        return when (response) {
             is ApiResponse.Success -> {
-                return response.data.url
+                response.data.url
             }
 
-            else -> {
-                return null
-            }
+            else -> { null }
         }
     }
 

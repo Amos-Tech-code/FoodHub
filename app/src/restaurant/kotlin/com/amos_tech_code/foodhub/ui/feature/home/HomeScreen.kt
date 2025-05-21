@@ -1,12 +1,16 @@
 package com.amos_tech_code.foodhub.ui.feature.home
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.RestaurantMenu
 import androidx.compose.material.icons.rounded.MoreVert
@@ -22,6 +26,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -30,6 +35,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -130,7 +136,7 @@ fun HomeScreen(
                             )
                         }
                     }
-                }
+                },
             )
         }
     ) { innerPadding ->
@@ -154,35 +160,68 @@ fun HomeScreen(
 
                 is HomeViewModel.HomeScreenState.Success -> {
                     val restaurant = (uiState.value as HomeViewModel.HomeScreenState.Success).data
-                    AsyncImage(
-                        model = restaurant.imageUrl,
-                        contentDescription = null,
+                    Box(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .height(150.dp),
-                        contentScale = ContentScale.Crop
-                    )
-                    Column(modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp)) {
-                        Text(
-                            text = restaurant.name,
-                            fontWeight = FontWeight.SemiBold,
-                            style = MaterialTheme.typography.titleLarge
-                        )
-                        Spacer(modifier = Modifier.padding(8.dp))
-                        Text(text = restaurant.address, style = MaterialTheme.typography.bodyMedium)
-                        Spacer(modifier = Modifier.padding(8.dp))
-                        Text(
-                            text = restaurant.createdAt,
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                        Spacer(modifier = Modifier.padding(8.dp))
+                            .fillMaxSize()
+                    ) {
+                        Column(
+                            modifier = Modifier.verticalScroll(rememberScrollState())
+                        ) {
+                            AsyncImage(
+                                model = restaurant.imageUrl,
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(150.dp),
+                                contentScale = ContentScale.Crop
+                            )
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(16.dp)
+                            ) {
+                                Text(
+                                    text = restaurant.name,
+                                    fontWeight = FontWeight.Bold,
+                                    style = MaterialTheme.typography.titleLarge
+                                )
+                                Spacer(modifier = Modifier.padding(8.dp))
+                                Text(
+                                    text = "Location: ${restaurant.address}",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                                Spacer(modifier = Modifier.padding(8.dp))
+                                Text(
+                                    text = "Created on: ${restaurant.createdAt}",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                                Spacer(modifier = Modifier.padding(8.dp))
+
+                                Text(
+                                    text = "OwnerID: #${restaurant.ownerId}",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                                Spacer(modifier = Modifier.height(56.dp))
+
+
+                            }
+                        }
+
+                        Box(
+                            modifier = Modifier
+                                .align(Alignment.BottomEnd)
+                                .offset((-32).dp, (-80).dp)
+                        ) {
+                            AddMenuItemExtendedFAB {
+                                navController.navigate(AddMenuItem)
+                            }
+                        }
+
                     }
 
-                    AddMenuItemExtendedFAB {
-                        navController.navigate(AddMenuItem)
-                    }
                 }
 
             }
@@ -193,7 +232,8 @@ fun HomeScreen(
 
 @Composable
 fun AddMenuItemExtendedFAB(
-    onClick: () -> Unit
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
 ) {
     ExtendedFloatingActionButton(
         onClick = onClick,
@@ -205,6 +245,7 @@ fun AddMenuItemExtendedFAB(
         },
         text = { Text("Add Item") },
         containerColor = MaterialTheme.colorScheme.primary,
-        contentColor = MaterialTheme.colorScheme.onPrimary
+        contentColor = MaterialTheme.colorScheme.onPrimary,
+        modifier = modifier
     )
 }
